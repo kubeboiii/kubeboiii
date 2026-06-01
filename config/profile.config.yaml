@@ -4,6 +4,13 @@ tagline: "DevOps / Platform engineer — AWS, Kubernetes, and cloud-native tooli
 website_url: https://himanshu.wtf/
 linkedin_url: https://www.linkedin.com/in/kubeboiii/
 
+theme:
+  badge_color: "111"
+
+profile_views:
+  enabled: true
+  label: "Profile views"
+
 exclude_repo_owners:
   - kubeboiii
 

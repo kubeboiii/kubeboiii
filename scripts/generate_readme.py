@@ -11,6 +11,7 @@ import sys
 from collections import defaultdict
 from datetime import date
 from pathlib import Path
+from urllib.parse import quote, urlparse
 
 import requests
 import yaml
@@ -323,9 +324,24 @@ def format_star_count(count: int) -> str:
     return text.replace(".0M", "M").replace(".0k", "k")
 
 
-def star_badge_url(count: int) -> str:
+def get_badge_color(config: dict) -> str:
+    theme = config.get("theme", {}) or {}
+    return str(theme.get("badge_color", "111"))
+
+
+def website_badge_label(url: str) -> str:
+    parsed = urlparse(url)
+    return parsed.netloc or parsed.path.strip("/") or "website"
+
+
+def linkedin_handle(url: str, username: str) -> str:
+    parts = url.rstrip("/").split("/")
+    return parts[-1] if parts else username
+
+
+def star_badge_url(count: int, color: str) -> str:
     label = format_star_count(count)
-    return f"https://img.shields.io/badge/stars-{label}-gold?style=flat"
+    return f"https://img.shields.io/badge/stars-{label}-{color}?style=flat"
 
 
 def static_badge(label: str, value: str | int, color: str) -> str:
@@ -369,9 +385,10 @@ def render_repo_line(
     tag = ecosystem_tag(repo, config)
     tag_suffix = f" · *{tag}*" if tag else ""
 
+    color = get_badge_color(config)
     return (
         f"- **[{repo}](https://github.com/{repo})**{tag_suffix} "
-        f"[![GitHub stars]({star_badge_url(star_count)})]"
+        f"[![GitHub stars]({star_badge_url(star_count, color)})]"
         f"(https://github.com/{repo}/stargazers) - {pr_text}"
     )
 
@@ -511,14 +528,58 @@ def render_narrative(
     return "\n\n".join(sections)
 
 
-def render_stats(grouped: dict[str, dict]) -> str:
+def render_profile_views(username: str, config: dict) -> str:
+    profile_views = config.get("profile_views", {}) or {}
+    if not profile_views.get("enabled", False):
+        return ""
+
+    color = get_badge_color(config)
+    label = profile_views.get("label", "Profile views")
+    badge_url = (
+        f"https://komarev.com/ghpvc/?username={username}"
+        f"&label={quote(label)}&color={color}&style=flat"
+    )
+    return f"[![Profile views]({badge_url})](https://github.com/{username})"
+
+
+def render_header_badges(config: dict, username: str) -> str:
+    color = get_badge_color(config)
+    badges: list[str] = []
+
+    linkedin_url = config.get("linkedin_url", "")
+    if linkedin_url:
+        handle = linkedin_handle(linkedin_url, username)
+        badge_url = (
+            f"https://img.shields.io/badge/LinkedIn-{handle}-{color}"
+            f"?style=flat&logo=linkedin&logoColor=white"
+        )
+        badges.append(f"[![LinkedIn]({badge_url})]({linkedin_url})")
+
+    website_url = config.get("website_url", "")
+    if website_url:
+        label = website_badge_label(website_url)
+        badge_url = (
+            f"https://img.shields.io/badge/Website-{label}-{color}"
+            f"?style=flat&logo=google-chrome&logoColor=white"
+        )
+        badges.append(f"[![Website]({badge_url})]({website_url})")
+
+    views = render_profile_views(username, config)
+    if views:
+        badges.append(views)
+
+    return "\n".join(badges)
+
+
+def render_stats(grouped: dict[str, dict], config: dict) -> str:
     merged_count, open_count = count_prs(grouped)
     repo_count = len(grouped)
+    color = get_badge_color(config)
 
     badges = [
-        f"![Merged PRs]({static_badge('Merged_PRs', merged_count, '2ea44f')})",
-        f"![Open PRs]({static_badge('Open_PRs', open_count, 'fb8500')})",
-        f"![Repos]({static_badge('Repos', repo_count, '0969da')})",
+        f"![Merged PRs]({static_badge('Merged_PRs', merged_count, color)})",
+        f"![Open PRs]({static_badge('Open_PRs', open_count, color)})",
+        f"![Repos]({static_badge('Repos', repo_count, color)})",
     ]
     return "\n".join(badges)
 
@@ -547,6 +608,7 @@ def render_footer() -> str:
 
 
 def build_readme(
+    header_badges: str,
     stats: str,
     narrative: str,
     contributions: str,
@@ -556,6 +618,7 @@ def build_readme(
         template = handle.read()
 
     replacements = {
+        "<!-- AUTO:HEADER_BADGES -->": header_badges,
         "<!-- AUTO:STATS -->": stats,
         "<!-- AUTO:NARRATIVE -->": narrative,
         "<!-- AUTO:CONTRIBUTIONS -->": contributions,
@@ -582,11 +645,12 @@ def main() -> None:
     cache = load_cache()
     stars = fetch_stars(token, list(grouped.keys()), cache)
 
-    stats = render_stats(grouped)
+    stats = render_stats(grouped, config)
     narrative = render_narrative(grouped, config, token, username)
     contributions = render_contributions(grouped, stars, config)
     footer = render_footer()
-    readme = build_readme(stats, narrative, contributions, footer)
+    header_badges = render_header_badges(config, username)
+    readme = build_readme(header_badges, stats, narrative, contributions, footer)
 
     OUTPUT_PATH.write_text(readme, encoding="utf-8")
     merged_count, open_count = count_prs(grouped)
