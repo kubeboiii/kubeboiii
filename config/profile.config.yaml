@@ -5,9 +5,9 @@ website_url: https://himanshu.wtf/
 linkedin_url: https://www.linkedin.com/in/kubeboiii/
 
 theme:
-  linkedin: "7c3aed"
-  website: "7c3aed"
-  profile_views: "dc143c"
+  linkedin: "dc143c"
+  website: "dc143c"
+  profile_views: "7c3aed"
   merged_prs: "fb8500"
   open_prs: "fb8500"
   repos: "fb8500"
