@@ -533,7 +533,7 @@ def render_profile_views(username: str, config: dict) -> str:
     if not profile_views.get("enabled", False):
         return ""
 
-    color = get_theme_color(config, "profile_views", "7c3aed")
+    color = get_theme_color(config, "profile_views", "dc143c")
     label = profile_views.get("label", "Profile views")
     badge_url = (
         f"https://komarev.com/ghpvc/?username={username}"
@@ -548,7 +548,7 @@ def render_header_badges(config: dict, username: str) -> str:
     linkedin_url = config.get("linkedin_url", "")
     if linkedin_url:
         handle = linkedin_handle(linkedin_url, username)
-        color = get_theme_color(config, "linkedin", "0A66C2")
+        color = get_theme_color(config, "linkedin", "7c3aed")
         badge_url = (
             f"https://img.shields.io/badge/LinkedIn-{handle}-{color}"
             f"?style=flat&logo=linkedin&logoColor=white"
@@ -558,7 +558,7 @@ def render_header_badges(config: dict, username: str) -> str:
     website_url = config.get("website_url", "")
     if website_url:
         label = website_badge_label(website_url)
-        color = get_theme_color(config, "website", "0A66C2")
+        color = get_theme_color(config, "website", "7c3aed")
         badge_url = (
             f"https://img.shields.io/badge/Website-{label}-{color}"
             f"?style=flat&logo=google-chrome&logoColor=white"
