@@ -26,7 +26,7 @@ GH_TOKEN="$(gh auth token)" python3 scripts/generate_readme.py
 | `README.template.md` | Static header — edit name, badges, tagline here |
 | `config/profile.config.yaml` | Excludes, sort order, open PR prefix |
 | `scripts/generate_readme.py` | Fetches merged + open PRs, writes `README.md` |
-| `.github/workflows/update-readme.yml` | Regenerates every Monday + manual trigger |
+| `.github/workflows/update-readme.yml` | Regenerates daily at 06:00 UTC + manual trigger |
 
 ## Customize
 
