@@ -379,13 +379,11 @@ def render_repo_line(
 def render_stats(grouped: dict[str, dict]) -> str:
     merged_count, open_count = count_prs(grouped)
     repo_count = len(grouped)
-    updated = date.today().isoformat()
 
     badges = [
         f"![Merged PRs]({static_badge('Merged_PRs', merged_count, '2ea44f')})",
         f"![Open PRs]({static_badge('Open_PRs', open_count, 'fb8500')})",
         f"![Repos]({static_badge('Repos', repo_count, '0969da')})",
-        f"![Updated]({static_badge('Updated', updated, '6e7781')})",
     ]
     return "\n".join(badges)
 
@@ -406,22 +404,7 @@ def render_contributions(
     if not all_lines:
         return "_No upstream contributions found yet._"
 
-    limit = config.get("visible_repo_limit", 15)
-    if limit <= 0 or len(all_lines) <= limit:
-        return "\n".join(all_lines)
-
-    visible = all_lines[:limit]
-    hidden = all_lines[limit:]
-    summary = f"All contributions ({len(all_lines)} repos)"
-
-    return (
-        "\n".join(visible)
-        + "\n\n<details>\n<summary>"
-        + summary
-        + "</summary>\n\n"
-        + "\n".join(hidden)
-        + "\n\n</details>"
-    )
+    return "\n".join(all_lines)
 
 
 def render_footer() -> str:

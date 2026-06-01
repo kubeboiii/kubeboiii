@@ -48,8 +48,6 @@ include_draft_prs: false
 
 open_pr_prefix: "open:"
 
-visible_repo_limit: 15
-
 exclude_title_patterns:
   - "^Merge branch"
   - "^Merge pull request"
