@@ -1,10 +1,10 @@
-### Yoooo, I'm Himanshu!!
+### Hey, I'm Himanshu Wankhade
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-kubeboiii-0A66C2?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/kubeboiii/)
-[![Website](https://img.shields.io/badge/Website-himanshu.wtf-111?style=flat&logo=google-chrome&logoColor=white)](https://himanshu.wtf/)
+[![Website](https://img.shields.io/badge/Website-himanshu.wtf-7c3aed?style=flat&logo=google-chrome&logoColor=white)](https://himanshu.wtf/)
 [![Profile views](https://komarev.com/ghpvc/?username=kubeboiii&label=Profile%20views&color=0e75b6&style=flat)](https://github.com/kubeboiii)
 
-Cloud-Native open-source engineer with a focus on Kubernetes, AWS, and Distributed systems.
+DevOps / Platform engineer — AWS, Kubernetes, and cloud-native tooling.
 
 ![Merged PRs](https://img.shields.io/badge/Merged_PRs-1-2ea44f?style=flat)
 ![Open PRs](https://img.shields.io/badge/Open_PRs-6-fb8500?style=flat)
