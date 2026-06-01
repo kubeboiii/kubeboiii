@@ -1,0 +1,27 @@
+github_username: kubeboiii
+display_name: Himanshu Wankhade
+tagline: "DevOps / Platform engineer — AWS, Kubernetes, and cloud-native tooling."
+website_url: https://himanshu.wtf/
+linkedin_url: https://www.linkedin.com/in/kubeboiii/
+
+exclude_repo_owners:
+  - kubeboiii
+
+exclude_repos:
+  - kubeboiii/trainer
+  - kubeboiii/pipecd
+
+sort_by: stars
+sort_direction: desc
+
+max_merged_prs_per_repo: 0
+max_open_prs_per_repo: 0
+
+include_open_prs: true
+include_draft_prs: false
+
+open_pr_prefix: "open:"
+
+exclude_title_patterns:
+  - "^Merge branch"
+  - "^Merge pull request"
