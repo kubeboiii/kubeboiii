@@ -1,8 +1,8 @@
-### Hey, I'm Himanshu Wankhade
+### Hey, I'm Himanshu!
 
 <!-- AUTO:HEADER_BADGES -->
 
-DevOps / Platform engineer — AWS, Kubernetes, and cloud-native tooling.
+Cloud-native open-source engineer working across the CNCF ecosystem, Kubernetes, AWS, and distributed systems.
 
 <!-- AUTO:STATS -->
 
