@@ -9,7 +9,7 @@ import re
 import subprocess
 import sys
 from collections import defaultdict
-from datetime import date, datetime, timezone
+from datetime import date
 from pathlib import Path
 
 import requests
@@ -17,7 +17,6 @@ import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG_PATH = ROOT / "config" / "profile.config.yaml"
-CNCF_PATH = ROOT / "config" / "cncf_landscape.yaml"
 TEMPLATE_PATH = ROOT / "README.template.md"
 OUTPUT_PATH = ROOT / "README.md"
 CACHE_PATH = ROOT / ".cache" / "repos.json"
@@ -377,33 +376,10 @@ def render_repo_line(
     )
 
 
-def load_cncf_landscape() -> dict:
-    if not CNCF_PATH.exists():
-        return {"zones": {}}
-    with CNCF_PATH.open(encoding="utf-8") as handle:
-        return yaml.safe_load(handle) or {"zones": {}}
-
-
-def pr_number_from_url(url: str) -> str:
-    return url.rstrip("/").split("/")[-1]
-
-
 def format_short_date(iso: str | None) -> str:
     if not iso:
         return "????-??-??"
     return iso[:10]
-
-
-def format_age(iso: str | None) -> str:
-    if not iso:
-        return "?"
-    dt = datetime.fromisoformat(iso.replace("Z", "+00:00"))
-    days = (datetime.now(timezone.utc) - dt).days
-    if days <= 0:
-        return "today"
-    if days == 1:
-        return "1d"
-    return f"{days}d"
 
 
 def classify_pr_title(title: str) -> str:
@@ -434,15 +410,6 @@ def all_merged_prs(grouped: dict[str, dict]) -> list[dict]:
     return merged
 
 
-def all_open_prs(grouped: dict[str, dict]) -> list[dict]:
-    open_prs: list[dict] = []
-    for repo, data in grouped.items():
-        for pr in data["open"]:
-            open_prs.append({**pr, "repo": repo})
-    open_prs.sort(key=lambda item: item.get("at") or "", reverse=True)
-    return open_prs
-
-
 def fetch_review_stats(token: str, username: str) -> tuple[int, int]:
     query = f"reviewed-by:{username} is:pr"
     try:
@@ -452,46 +419,6 @@ def fetch_review_stats(token: str, username: str) -> tuple[int, int]:
 
     repos = {item["repository"]["nameWithOwner"] for item in reviews if item}
     return len(reviews), len(repos)
-
-
-def render_ci_badge(config: dict) -> str:
-    repo = config.get("github_repo", "kubeboiii/kubeboiii")
-    workflow = config.get("workflow_file", "update-readme.yml")
-    badge_url = f"https://github.com/{repo}/actions/workflows/{workflow}/badge.svg"
-    actions_url = f"https://github.com/{repo}/actions/workflows/{workflow}"
-    return f"[![README CI]({badge_url})]({actions_url})"
-
-
-def render_cncf_passport(grouped: dict[str, dict], landscape: dict) -> str:
-    zones: dict = landscape.get("zones", {}) or {}
-    if not zones:
-        return ""
-
-    matched_zones: list[tuple[str, list[str]]] = []
-    for zone, repos in zones.items():
-        hits = [repo for repo in repos if repo in grouped]
-        if hits:
-            matched_zones.append((zone, hits))
-
-    if not matched_zones:
-        return ""
-
-    project_count = len({repo for _, hits in matched_zones for repo in hits})
-    zone_count = len(matched_zones)
-
-    lines = [
-        "#### Cloud native passport",
-        "",
-        f"**{project_count} projects** across **{zone_count} landscape zones**",
-        "",
-    ]
-    for zone, hits in matched_zones:
-        repo_links = ", ".join(
-            f"[{repo}](https://github.com/{repo})" for repo in hits
-        )
-        lines.append(f"- **{zone}** — {repo_links}")
-
-    return "\n".join(lines)
 
 
 def render_contributor_mix(grouped: dict[str, dict], config: dict) -> str:
@@ -547,30 +474,6 @@ def render_ship_log(grouped: dict[str, dict], config: dict) -> str:
     return "\n".join(lines)
 
 
-def render_open_pr_pods(grouped: dict[str, dict]) -> str:
-    open_prs = all_open_prs(grouped)
-    if not open_prs:
-        return ""
-
-    lines = [
-        "#### Open pull requests",
-        "",
-        "```text",
-        f"{'NAME':<34} {'PHASE':<16} {'AGE':<6}",
-    ]
-    for pr in open_prs[:10]:
-        number = pr_number_from_url(pr["url"])
-        name = f"{pr['repo']}#{number}"
-        if len(name) > 33:
-            name = name[:32] + "…"
-        phase = "PendingReview"
-        age = format_age(pr.get("at"))
-        lines.append(f"{name:<34} {phase:<16} {age:<6}")
-
-    lines.append("```")
-    return "\n".join(lines)
-
-
 def render_reviewer_score(
     token: str, username: str, config: dict
 ) -> str:
@@ -588,19 +491,10 @@ def render_reviewer_score(
 def render_narrative(
     grouped: dict[str, dict],
     config: dict,
-    landscape: dict,
     token: str,
     username: str,
 ) -> str:
     sections: list[str] = []
-
-    ci = render_ci_badge(config)
-    if ci:
-        sections.append(ci)
-
-    cncf = render_cncf_passport(grouped, landscape)
-    if cncf:
-        sections.append(cncf)
 
     mix = render_contributor_mix(grouped, config)
     if mix:
@@ -609,10 +503,6 @@ def render_narrative(
     ship = render_ship_log(grouped, config)
     if ship:
         sections.append(ship)
-
-    pods = render_open_pr_pods(grouped)
-    if pods:
-        sections.append(pods)
 
     reviewer = render_reviewer_score(token, username, config)
     if reviewer:
@@ -685,7 +575,6 @@ def build_readme(
 
 def main() -> None:
     config = load_config()
-    landscape = load_cncf_landscape()
     token = get_token()
     username = config["github_username"]
 
@@ -694,7 +583,7 @@ def main() -> None:
     stars = fetch_stars(token, list(grouped.keys()), cache)
 
     stats = render_stats(grouped)
-    narrative = render_narrative(grouped, config, landscape, token, username)
+    narrative = render_narrative(grouped, config, token, username)
     contributions = render_contributions(grouped, stars, config)
     footer = render_footer()
     readme = build_readme(stats, narrative, contributions, footer)

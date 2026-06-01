@@ -24,7 +24,6 @@ GH_TOKEN="$(gh auth token)" python3 scripts/generate_readme.py
 | File | Purpose |
 |------|---------|
 | `README.template.md` | Static header — edit name, badges, tagline here |
-| `config/cncf_landscape.yaml` | Repo → cloud native landscape zone mapping |
 | `config/profile.config.yaml` | Excludes, flagship repos, ecosystem tags, ship log limit |
 | `scripts/generate_readme.py` | Fetches merged + open PRs, writes `README.md` |
 | `.github/workflows/update-readme.yml` | Regenerates every 12 hours + manual trigger |

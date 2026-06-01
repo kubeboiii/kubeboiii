@@ -52,9 +52,6 @@ ship_log_limit: 5
 contributor_mix_min_prs: 3
 reviewer_min_count: 5
 
-github_repo: kubeboiii/kubeboiii
-workflow_file: update-readme.yml
-
 exclude_title_patterns:
   - "^Merge branch"
   - "^Merge pull request"
