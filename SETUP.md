@@ -30,8 +30,8 @@ GH_TOKEN="$(gh auth token)" python3 scripts/generate_readme.py
 
 ## Customize
 
-- **Header / links:** edit `linkedin_url`, `website_url`, and `theme.badge_color` in config
-- **Profile views:** komarev counter in header; set `profile_views.enabled: false` to disable
-- **Badge color:** change `theme.badge_color` once to retheme every badge (header, stats, stars)
+- **Header / links:** edit `linkedin_url`, `website_url` in config
+- **Badge colors:** tweak per-badge colors under `theme` in config (stars default to `gold`)
+- **Profile views:** komarev counter in header; set `profile_views.enabled: false` to disable. Use a 6-digit hex or named color for `theme.profile_views` (not `111`).
 - **Hide your forks:** add repos to `exclude_repos` in config
 - **Sort order:** change `sort_by` to `stars`, `pr_count`, or `recent`

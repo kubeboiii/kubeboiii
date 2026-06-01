@@ -324,9 +324,15 @@ def format_star_count(count: int) -> str:
     return text.replace(".0M", "M").replace(".0k", "k")
 
 
-def get_badge_color(config: dict) -> str:
+def get_theme_color(config: dict, key: str, default: str) -> str:
     theme = config.get("theme", {}) or {}
-    return str(theme.get("badge_color", "111"))
+    return str(theme.get(key, default))
+
+
+def star_badge_url(count: int, config: dict) -> str:
+    label = format_star_count(count)
+    color = get_theme_color(config, "stars", "gold")
+    return f"https://img.shields.io/badge/stars-{label}-{color}?style=flat"
 
 
 def website_badge_label(url: str) -> str:
@@ -337,11 +343,6 @@ def website_badge_label(url: str) -> str:
 def linkedin_handle(url: str, username: str) -> str:
     parts = url.rstrip("/").split("/")
     return parts[-1] if parts else username
-
-
-def star_badge_url(count: int, color: str) -> str:
-    label = format_star_count(count)
-    return f"https://img.shields.io/badge/stars-{label}-{color}?style=flat"
 
 
 def static_badge(label: str, value: str | int, color: str) -> str:
@@ -385,10 +386,9 @@ def render_repo_line(
     tag = ecosystem_tag(repo, config)
     tag_suffix = f" · *{tag}*" if tag else ""
 
-    color = get_badge_color(config)
     return (
         f"- **[{repo}](https://github.com/{repo})**{tag_suffix} "
-        f"[![GitHub stars]({star_badge_url(star_count, color)})]"
+        f"[![GitHub stars]({star_badge_url(star_count, config)})]"
         f"(https://github.com/{repo}/stargazers) - {pr_text}"
     )
 
@@ -533,7 +533,7 @@ def render_profile_views(username: str, config: dict) -> str:
     if not profile_views.get("enabled", False):
         return ""
 
-    color = get_badge_color(config)
+    color = get_theme_color(config, "profile_views", "0e75b6")
     label = profile_views.get("label", "Profile views")
     badge_url = (
         f"https://komarev.com/ghpvc/?username={username}"
@@ -543,12 +543,12 @@ def render_profile_views(username: str, config: dict) -> str:
 
 
 def render_header_badges(config: dict, username: str) -> str:
-    color = get_badge_color(config)
     badges: list[str] = []
 
     linkedin_url = config.get("linkedin_url", "")
     if linkedin_url:
         handle = linkedin_handle(linkedin_url, username)
+        color = get_theme_color(config, "linkedin", "0A66C2")
         badge_url = (
             f"https://img.shields.io/badge/LinkedIn-{handle}-{color}"
             f"?style=flat&logo=linkedin&logoColor=white"
@@ -558,6 +558,7 @@ def render_header_badges(config: dict, username: str) -> str:
     website_url = config.get("website_url", "")
     if website_url:
         label = website_badge_label(website_url)
+        color = get_theme_color(config, "website", "111")
         badge_url = (
             f"https://img.shields.io/badge/Website-{label}-{color}"
             f"?style=flat&logo=google-chrome&logoColor=white"
@@ -574,12 +575,10 @@ def render_header_badges(config: dict, username: str) -> str:
 def render_stats(grouped: dict[str, dict], config: dict) -> str:
     merged_count, open_count = count_prs(grouped)
     repo_count = len(grouped)
-    color = get_badge_color(config)
-
     badges = [
-        f"![Merged PRs]({static_badge('Merged_PRs', merged_count, color)})",
-        f"![Open PRs]({static_badge('Open_PRs', open_count, color)})",
-        f"![Repos]({static_badge('Repos', repo_count, color)})",
+        f"![Merged PRs]({static_badge('Merged_PRs', merged_count, get_theme_color(config, 'merged_prs', '2ea44f'))})",
+        f"![Open PRs]({static_badge('Open_PRs', open_count, get_theme_color(config, 'open_prs', 'fb8500'))})",
+        f"![Repos]({static_badge('Repos', repo_count, get_theme_color(config, 'repos', '0969da'))})",
     ]
     return "\n".join(badges)
 

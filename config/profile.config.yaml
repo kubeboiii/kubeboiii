@@ -5,7 +5,13 @@ website_url: https://himanshu.wtf/
 linkedin_url: https://www.linkedin.com/in/kubeboiii/
 
 theme:
-  badge_color: "111"
+  linkedin: "0A66C2"
+  website: "111"
+  profile_views: "0e75b6"
+  merged_prs: "2ea44f"
+  open_prs: "fb8500"
+  repos: "0969da"
+  stars: "gold"
 
 profile_views:
   enabled: true
