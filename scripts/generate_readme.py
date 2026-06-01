@@ -558,7 +558,7 @@ def render_header_badges(config: dict, username: str) -> str:
     website_url = config.get("website_url", "")
     if website_url:
         label = website_badge_label(website_url)
-        color = get_theme_color(config, "website", "111")
+        color = get_theme_color(config, "website", "7c3aed")
         badge_url = (
             f"https://img.shields.io/badge/Website-{label}-{color}"
             f"?style=flat&logo=google-chrome&logoColor=white"
