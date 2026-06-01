@@ -247,10 +247,6 @@ def fetch_stars(token: str, repos: list[str], cache: dict) -> dict[str, int]:
     stars: dict[str, int] = {}
 
     for repo in repos:
-        if repo in cache:
-            stars[repo] = cache[repo].get("stars", 0)
-            continue
-
         response = session.get(f"{REST_URL}/repos/{repo}", headers=headers, timeout=30)
         if response.status_code == 404:
             stars[repo] = 0
@@ -288,6 +284,21 @@ def limit_items(items: list[dict], limit: int) -> list[dict]:
     return items[:limit]
 
 
+def format_star_count(count: int) -> str:
+    if count >= 1_000_000:
+        text = f"{count / 1_000_000:.1f}M"
+    elif count >= 1_000:
+        text = f"{count / 1_000:.1f}k"
+    else:
+        return str(count)
+    return text.replace(".0M", "M").replace(".0k", "k")
+
+
+def star_badge_url(count: int) -> str:
+    label = format_star_count(count)
+    return f"https://img.shields.io/badge/stars-{label}-gold?style=flat"
+
+
 def render_contributions(grouped: dict[str, dict], stars: dict[str, int], config: dict) -> str:
     if not grouped:
         return "_No upstream contributions found yet — check back after your next merged PR!_"
@@ -311,9 +322,10 @@ def render_contributions(grouped: dict[str, dict], stars: dict[str, int], config
             continue
 
         title_text = ", ".join(titles)
+        star_count = stars.get(repo, 0)
         lines.append(
             f"- **[{repo}](https://github.com/{repo})** "
-            f"[![GitHub stars](https://img.shields.io/github/stars/{repo}?style=flat&color=gold)]"
+            f"[![GitHub stars]({star_badge_url(star_count)})]"
             f"(https://github.com/{repo}/stargazers) - {title_text}"
         )
 
