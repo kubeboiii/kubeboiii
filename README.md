@@ -1,8 +1,8 @@
 ### Hey, I'm Himanshu Wankhade
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-kubeboiii-0A66C2?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/kubeboiii/)
-[![Website](https://img.shields.io/badge/Website-himanshu.wtf-0A66C2?style=flat&logo=google-chrome&logoColor=white)](https://himanshu.wtf/)
-[![Profile views](https://komarev.com/ghpvc/?username=kubeboiii&label=Profile%20views&color=7c3aed&style=flat)](https://github.com/kubeboiii)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-kubeboiii-7c3aed?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/kubeboiii/)
+[![Website](https://img.shields.io/badge/Website-himanshu.wtf-7c3aed?style=flat&logo=google-chrome&logoColor=white)](https://himanshu.wtf/)
+[![Profile views](https://komarev.com/ghpvc/?username=kubeboiii&label=Profile%20views&color=dc143c&style=flat)](https://github.com/kubeboiii)
 
 DevOps / Platform engineer — AWS, Kubernetes, and cloud-native tooling.
 
