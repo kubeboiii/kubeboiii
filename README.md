@@ -1,10 +1,10 @@
-### Hey, I'm Himanshu Wankhade
+### Hey, I'm Himanshu!
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-kubeboiii-7c3aed?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/kubeboiii/)
 [![Website](https://img.shields.io/badge/Website-himanshu.wtf-7c3aed?style=flat&logo=google-chrome&logoColor=white)](https://himanshu.wtf/)
 [![Profile views](https://komarev.com/ghpvc/?username=kubeboiii&label=Profile%20views&color=dc143c&style=flat)](https://github.com/kubeboiii)
 
-DevOps / Platform engineer — AWS, Kubernetes, and cloud-native tooling.
+Cloud-native open-source engineer working across the CNCF ecosystem, Kubernetes, AWS, and distributed systems.
 
 ![Merged PRs](https://img.shields.io/badge/Merged_PRs-1-fb8500?style=flat)
 ![Open PRs](https://img.shields.io/badge/Open_PRs-6-fb8500?style=flat)
