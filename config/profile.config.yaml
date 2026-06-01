@@ -6,11 +6,11 @@ linkedin_url: https://www.linkedin.com/in/kubeboiii/
 
 theme:
   linkedin: "0A66C2"
-  website: "7c3aed"
-  profile_views: "0e75b6"
-  merged_prs: "2ea44f"
+  website: "0A66C2"
+  profile_views: "7c3aed"
+  merged_prs: "fb8500"
   open_prs: "fb8500"
-  repos: "0969da"
+  repos: "fb8500"
   stars: "gold"
 
 profile_views:

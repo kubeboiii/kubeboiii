@@ -533,7 +533,7 @@ def render_profile_views(username: str, config: dict) -> str:
     if not profile_views.get("enabled", False):
         return ""
 
-    color = get_theme_color(config, "profile_views", "0e75b6")
+    color = get_theme_color(config, "profile_views", "7c3aed")
     label = profile_views.get("label", "Profile views")
     badge_url = (
         f"https://komarev.com/ghpvc/?username={username}"
@@ -558,7 +558,7 @@ def render_header_badges(config: dict, username: str) -> str:
     website_url = config.get("website_url", "")
     if website_url:
         label = website_badge_label(website_url)
-        color = get_theme_color(config, "website", "7c3aed")
+        color = get_theme_color(config, "website", "0A66C2")
         badge_url = (
             f"https://img.shields.io/badge/Website-{label}-{color}"
             f"?style=flat&logo=google-chrome&logoColor=white"
@@ -576,9 +576,9 @@ def render_stats(grouped: dict[str, dict], config: dict) -> str:
     merged_count, open_count = count_prs(grouped)
     repo_count = len(grouped)
     badges = [
-        f"![Merged PRs]({static_badge('Merged_PRs', merged_count, get_theme_color(config, 'merged_prs', '2ea44f'))})",
+        f"![Merged PRs]({static_badge('Merged_PRs', merged_count, get_theme_color(config, 'merged_prs', 'fb8500'))})",
         f"![Open PRs]({static_badge('Open_PRs', open_count, get_theme_color(config, 'open_prs', 'fb8500'))})",
-        f"![Repos]({static_badge('Repos', repo_count, get_theme_color(config, 'repos', '0969da'))})",
+        f"![Repos]({static_badge('Repos', repo_count, get_theme_color(config, 'repos', 'fb8500'))})",
     ]
     return "\n".join(badges)
 
