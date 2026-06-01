@@ -5,13 +5,27 @@
 
 DevOps / Platform engineer — AWS, Kubernetes, and cloud-native tooling.
 
+![Merged PRs](https://img.shields.io/badge/Merged_PRs-1-2ea44f?style=flat)
+![Open PRs](https://img.shields.io/badge/Open_PRs-6-fb8500?style=flat)
+![Repos](https://img.shields.io/badge/Repos-5-0969da?style=flat)
+![Updated](https://img.shields.io/badge/Updated-2026_06_01-6e7781?style=flat)
+
+#### Active (last 30 days)
+
+- **[kubeflow/trainer](https://github.com/kubeflow/trainer)** · *ML / Kubeflow* [![GitHub stars](https://img.shields.io/badge/stars-2.1k-gold?style=flat)](https://github.com/kubeflow/trainer/stargazers) - open: [feat(cache): support local Iceberg tables for dev and CI](https://github.com/kubeflow/trainer/pull/3564)
+- **[pipe-cd/pipecd](https://github.com/pipe-cd/pipecd)** · *GitOps / CD* [![GitHub stars](https://img.shields.io/badge/stars-1.3k-gold?style=flat)](https://github.com/pipe-cd/pipecd/stargazers) - open: [Prune orphan resources during Kubernetes rollback](https://github.com/pipe-cd/pipecd/pull/6805), open: [Add plugin init scaffold to pipectl](https://github.com/pipe-cd/pipecd/pull/6883)
+- **[volcano-sh/website](https://github.com/volcano-sh/website)** [![GitHub stars](https://img.shields.io/badge/stars-30-gold?style=flat)](https://github.com/volcano-sh/website/stargazers) - open: [Add favicon to Volcano website](https://github.com/volcano-sh/website/pull/508), open: [website: fix broken OG image and supporter links](https://github.com/volcano-sh/website/pull/510)
+- **[volcano-sh/volcano](https://github.com/volcano-sh/volcano)** [![GitHub stars](https://img.shields.io/badge/stars-5.6k-gold?style=flat)](https://github.com/volcano-sh/volcano/stargazers) - open: [metriccollect: use memory working set for agent eviction metrics](https://github.com/volcano-sh/volcano/pull/5337)
+- **[pulumi/pulumi-aws](https://github.com/pulumi/pulumi-aws)** [![GitHub stars](https://img.shields.io/badge/stars-576-gold?style=flat)](https://github.com/pulumi/pulumi-aws/stargazers) - [docs: replace Terraform lifecycle block with Pulumi ignoreChanges in …](https://github.com/pulumi/pulumi-aws/pull/6277)
+
+
 #### Contributing to
 
-- **[volcano-sh/volcano](https://github.com/volcano-sh/volcano)** [![GitHub stars](https://img.shields.io/badge/stars-5.6k-gold?style=flat)](https://github.com/volcano-sh/volcano/stargazers) - open: metriccollect: use memory working set for agent eviction metrics
-- **[kubeflow/trainer](https://github.com/kubeflow/trainer)** [![GitHub stars](https://img.shields.io/badge/stars-2.1k-gold?style=flat)](https://github.com/kubeflow/trainer/stargazers) - open: feat(cache): support local Iceberg tables for dev and CI
-- **[pipe-cd/pipecd](https://github.com/pipe-cd/pipecd)** [![GitHub stars](https://img.shields.io/badge/stars-1.3k-gold?style=flat)](https://github.com/pipe-cd/pipecd/stargazers) - open: Prune orphan resources during Kubernetes rollback, open: Add plugin init scaffold to pipectl
-- **[pulumi/pulumi-aws](https://github.com/pulumi/pulumi-aws)** [![GitHub stars](https://img.shields.io/badge/stars-576-gold?style=flat)](https://github.com/pulumi/pulumi-aws/stargazers) - docs: replace Terraform lifecycle block with Pulumi ignoreChanges in …
-- **[volcano-sh/website](https://github.com/volcano-sh/website)** [![GitHub stars](https://img.shields.io/badge/stars-30-gold?style=flat)](https://github.com/volcano-sh/website/stargazers) - open: Add favicon to Volcano website, open: website: fix broken OG image and supporter links
+- **[kubeflow/trainer](https://github.com/kubeflow/trainer)** · *ML / Kubeflow* [![GitHub stars](https://img.shields.io/badge/stars-2.1k-gold?style=flat)](https://github.com/kubeflow/trainer/stargazers) - open: [feat(cache): support local Iceberg tables for dev and CI](https://github.com/kubeflow/trainer/pull/3564)
+- **[pipe-cd/pipecd](https://github.com/pipe-cd/pipecd)** · *GitOps / CD* [![GitHub stars](https://img.shields.io/badge/stars-1.3k-gold?style=flat)](https://github.com/pipe-cd/pipecd/stargazers) - open: [Prune orphan resources during Kubernetes rollback](https://github.com/pipe-cd/pipecd/pull/6805), open: [Add plugin init scaffold to pipectl](https://github.com/pipe-cd/pipecd/pull/6883)
+- **[volcano-sh/volcano](https://github.com/volcano-sh/volcano)** [![GitHub stars](https://img.shields.io/badge/stars-5.6k-gold?style=flat)](https://github.com/volcano-sh/volcano/stargazers) - open: [metriccollect: use memory working set for agent eviction metrics](https://github.com/volcano-sh/volcano/pull/5337)
+- **[pulumi/pulumi-aws](https://github.com/pulumi/pulumi-aws)** [![GitHub stars](https://img.shields.io/badge/stars-576-gold?style=flat)](https://github.com/pulumi/pulumi-aws/stargazers) - [docs: replace Terraform lifecycle block with Pulumi ignoreChanges in …](https://github.com/pulumi/pulumi-aws/pull/6277)
+- **[volcano-sh/website](https://github.com/volcano-sh/website)** [![GitHub stars](https://img.shields.io/badge/stars-30-gold?style=flat)](https://github.com/volcano-sh/website/stargazers) - open: [Add favicon to Volcano website](https://github.com/volcano-sh/website/pull/508), open: [website: fix broken OG image and supporter links](https://github.com/volcano-sh/website/pull/510)
 
 
 *Last updated: 2026-06-01*
