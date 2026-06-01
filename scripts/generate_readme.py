@@ -9,7 +9,7 @@ import re
 import subprocess
 import sys
 from collections import defaultdict
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 import requests
@@ -166,6 +166,12 @@ def should_exclude_title(title: str, patterns: list[str]) -> bool:
     return any(re.search(pattern, title) for pattern in patterns)
 
 
+def parse_iso(dt: str | None) -> datetime | None:
+    if not dt:
+        return None
+    return datetime.fromisoformat(dt.replace("Z", "+00:00"))
+
+
 def fetch_pull_requests(token: str, username: str, config: dict) -> dict[str, dict]:
     merged_query = f"author:{username} is:pr is:merged"
     open_query = f"author:{username} is:pr is:open"
@@ -176,7 +182,7 @@ def fetch_pull_requests(token: str, username: str, config: dict) -> dict[str, di
     include_drafts = config.get("include_draft_prs", False)
 
     grouped: dict[str, dict] = defaultdict(
-        lambda: {"merged": [], "open": [], "latest": None, "stars": 0}
+        lambda: {"merged": [], "open": [], "latest": None}
     )
 
     merged_prs = graphql_search(token, merged_query)
@@ -191,7 +197,9 @@ def fetch_pull_requests(token: str, username: str, config: dict) -> dict[str, di
             continue
 
         merged_at = pr.get("mergedAt")
-        grouped[repo]["merged"].append({"title": title, "at": merged_at})
+        grouped[repo]["merged"].append(
+            {"title": title, "url": pr["url"], "at": merged_at}
+        )
         if merged_at and (
             grouped[repo]["latest"] is None or merged_at > grouped[repo]["latest"]
         ):
@@ -215,7 +223,9 @@ def fetch_pull_requests(token: str, username: str, config: dict) -> dict[str, di
                 continue
 
             created_at = pr.get("createdAt")
-            grouped[repo]["open"].append({"title": title, "at": created_at})
+            grouped[repo]["open"].append(
+                {"title": title, "url": pr["url"], "at": created_at}
+            )
             if created_at and (
                 grouped[repo]["latest"] is None or created_at > grouped[repo]["latest"]
             ):
@@ -261,7 +271,31 @@ def fetch_stars(token: str, repos: list[str], cache: dict) -> dict[str, int]:
     return stars
 
 
+def count_prs(grouped: dict[str, dict]) -> tuple[int, int]:
+    merged = sum(len(data["merged"]) for data in grouped.values())
+    open_count = sum(len(data["open"]) for data in grouped.values())
+    return merged, open_count
+
+
+def ecosystem_tag(repo: str, config: dict) -> str | None:
+    explicit = config.get("ecosystem_tags", {}) or {}
+    if repo in explicit:
+        return explicit[repo]
+
+    lower_repo = repo.lower()
+    for prefix, tag in (config.get("ecosystem_prefixes", {}) or {}).items():
+        if lower_repo.startswith(prefix.lower()):
+            return tag
+
+    return None
+
+
 def sort_repos(grouped: dict[str, dict], stars: dict[str, int], config: dict) -> list[str]:
+    flagship = config.get("flagship_repos", []) or []
+    flagship_set = set(flagship)
+    present_flagship = [repo for repo in flagship if repo in grouped]
+
+    remaining = [repo for repo in grouped if repo not in flagship_set]
     sort_by = config.get("sort_by", "stars")
     reverse = config.get("sort_direction", "desc") == "desc"
 
@@ -275,7 +309,8 @@ def sort_repos(grouped: dict[str, dict], stars: dict[str, int], config: dict) ->
     else:
         key = lambda repo: stars.get(repo, 0)
 
-    return sorted(grouped.keys(), key=key, reverse=reverse)
+    remaining_sorted = sorted(remaining, key=key, reverse=reverse)
+    return present_flagship + remaining_sorted
 
 
 def limit_items(items: list[dict], limit: int) -> list[dict]:
@@ -299,56 +334,166 @@ def star_badge_url(count: int) -> str:
     return f"https://img.shields.io/badge/stars-{label}-gold?style=flat"
 
 
-def render_contributions(grouped: dict[str, dict], stars: dict[str, int], config: dict) -> str:
-    if not grouped:
-        return "_No upstream contributions found yet — check back after your next merged PR!_"
+def static_badge(label: str, value: str | int, color: str) -> str:
+    safe_label = str(label).replace(" ", "_").replace("-", "_")
+    safe_value = str(value).replace(" ", "_").replace("-", "_")
+    return f"https://img.shields.io/badge/{safe_label}-{safe_value}-{color}?style=flat"
 
+
+def format_pr_links(
+    merged: list[dict], open_prs: list[dict], open_prefix: str
+) -> str:
+    parts: list[str] = []
+    for item in merged:
+        parts.append(f"[{item['title']}]({item['url']})")
+    for item in open_prs:
+        parts.append(f"{open_prefix} [{item['title']}]({item['url']})")
+    return ", ".join(parts)
+
+
+def render_repo_line(
+    repo: str,
+    grouped: dict[str, dict],
+    stars: dict[str, int],
+    config: dict,
+) -> str | None:
     open_prefix = config.get("open_pr_prefix", "open:")
     max_merged = config.get("max_merged_prs_per_repo", 0)
     max_open = config.get("max_open_prs_per_repo", 0)
 
-    lines: list[str] = []
-    for repo in sort_repos(grouped, stars, config):
-        merged = sorted(grouped[repo]["merged"], key=lambda item: item["at"] or "")
-        open_prs = sorted(grouped[repo]["open"], key=lambda item: item["at"] or "")
+    merged = sorted(grouped[repo]["merged"], key=lambda item: item["at"] or "")
+    open_prs = sorted(grouped[repo]["open"], key=lambda item: item["at"] or "")
 
-        merged = limit_items(merged, max_merged)
-        open_prs = limit_items(open_prs, max_open)
+    merged = limit_items(merged, max_merged)
+    open_prs = limit_items(open_prs, max_open)
 
-        titles = [item["title"] for item in merged]
-        titles.extend(f"{open_prefix} {item['title']}" for item in open_prs)
+    if not merged and not open_prs:
+        return None
 
-        if not titles:
-            continue
+    pr_text = format_pr_links(merged, open_prs, open_prefix)
+    star_count = stars.get(repo, 0)
+    tag = ecosystem_tag(repo, config)
+    tag_suffix = f" · *{tag}*" if tag else ""
 
-        title_text = ", ".join(titles)
-        star_count = stars.get(repo, 0)
-        lines.append(
-            f"- **[{repo}](https://github.com/{repo})** "
-            f"[![GitHub stars]({star_badge_url(star_count)})]"
-            f"(https://github.com/{repo}/stargazers) - {title_text}"
-        )
+    return (
+        f"- **[{repo}](https://github.com/{repo})**{tag_suffix} "
+        f"[![GitHub stars]({star_badge_url(star_count)})]"
+        f"(https://github.com/{repo}/stargazers) - {pr_text}"
+    )
 
-    return "\n".join(lines) if lines else "_No upstream contributions found yet._"
+
+def is_repo_active(repo: str, grouped: dict[str, dict], active_days: int) -> bool:
+    latest = grouped[repo].get("latest")
+    if not latest:
+        return False
+    dt = parse_iso(latest)
+    if not dt:
+        return False
+    cutoff = datetime.now(timezone.utc) - timedelta(days=active_days)
+    return dt >= cutoff
+
+
+def render_stats(grouped: dict[str, dict]) -> str:
+    merged_count, open_count = count_prs(grouped)
+    repo_count = len(grouped)
+    updated = date.today().isoformat()
+
+    badges = [
+        f"![Merged PRs]({static_badge('Merged_PRs', merged_count, '2ea44f')})",
+        f"![Open PRs]({static_badge('Open_PRs', open_count, 'fb8500')})",
+        f"![Repos]({static_badge('Repos', repo_count, '0969da')})",
+        f"![Updated]({static_badge('Updated', updated, '6e7781')})",
+    ]
+    return "\n".join(badges)
+
+
+def render_active_strip(
+    grouped: dict[str, dict], stars: dict[str, int], config: dict
+) -> str:
+    active_days = config.get("active_days", 30)
+    active_repos = [
+        repo
+        for repo in grouped
+        if is_repo_active(repo, grouped, active_days)
+    ]
+    if not active_repos:
+        return ""
+
+    active_repos.sort(
+        key=lambda repo: grouped[repo]["latest"] or "",
+        reverse=True,
+    )
+
+    lines = [f"#### Active (last {active_days} days)", ""]
+    for repo in active_repos:
+        line = render_repo_line(repo, grouped, stars, config)
+        if line:
+            lines.append(line)
+
+    return "\n".join(lines) + "\n"
+
+
+def render_contributions(
+    grouped: dict[str, dict], stars: dict[str, int], config: dict
+) -> str:
+    if not grouped:
+        return "_No upstream contributions found yet — check back after your next merged PR!_"
+
+    ordered = sort_repos(grouped, stars, config)
+    all_lines: list[str] = []
+    for repo in ordered:
+        line = render_repo_line(repo, grouped, stars, config)
+        if line:
+            all_lines.append(line)
+
+    if not all_lines:
+        return "_No upstream contributions found yet._"
+
+    limit = config.get("visible_repo_limit", 15)
+    if limit <= 0 or len(all_lines) <= limit:
+        return "\n".join(all_lines)
+
+    visible = all_lines[:limit]
+    hidden = all_lines[limit:]
+    summary = f"All contributions ({len(all_lines)} repos)"
+
+    return (
+        "\n".join(visible)
+        + "\n\n<details>\n<summary>"
+        + summary
+        + "</summary>\n\n"
+        + "\n".join(hidden)
+        + "\n\n</details>"
+    )
 
 
 def render_footer() -> str:
     return f"\n*Last updated: {date.today().isoformat()}*"
 
 
-def build_readme(config: dict, contributions: str, footer: str) -> str:
+def build_readme(
+    stats: str,
+    active: str,
+    contributions: str,
+    footer: str,
+) -> str:
     with TEMPLATE_PATH.open(encoding="utf-8") as handle:
         template = handle.read()
 
-    if "<!-- AUTO:CONTRIBUTIONS -->" not in template:
-        sys.exit("README.template.md is missing <!-- AUTO:CONTRIBUTIONS --> anchor")
+    replacements = {
+        "<!-- AUTO:STATS -->": stats,
+        "<!-- AUTO:ACTIVE -->": active,
+        "<!-- AUTO:CONTRIBUTIONS -->": contributions,
+        "<!-- AUTO:FOOTER -->": footer,
+    }
 
-    output = template.replace("<!-- AUTO:CONTRIBUTIONS -->", contributions)
-
-    if "<!-- AUTO:FOOTER -->" in output:
-        output = output.replace("<!-- AUTO:FOOTER -->", footer)
-    else:
-        output = output.rstrip() + "\n\n" + footer + "\n"
+    output = template
+    for anchor, content in replacements.items():
+        if anchor not in output:
+            if anchor == "<!-- AUTO:CONTRIBUTIONS -->":
+                sys.exit("README.template.md is missing <!-- AUTO:CONTRIBUTIONS --> anchor")
+            continue
+        output = output.replace(anchor, content)
 
     return output
 
@@ -362,12 +507,18 @@ def main() -> None:
     cache = load_cache()
     stars = fetch_stars(token, list(grouped.keys()), cache)
 
+    stats = render_stats(grouped)
+    active = render_active_strip(grouped, stars, config)
     contributions = render_contributions(grouped, stars, config)
     footer = render_footer()
-    readme = build_readme(config, contributions, footer)
+    readme = build_readme(stats, active, contributions, footer)
 
     OUTPUT_PATH.write_text(readme, encoding="utf-8")
-    print(f"Wrote {OUTPUT_PATH} ({len(grouped)} repos)")
+    merged_count, open_count = count_prs(grouped)
+    print(
+        f"Wrote {OUTPUT_PATH} ({len(grouped)} repos, "
+        f"{merged_count} merged, {open_count} open PRs)"
+    )
 
 
 if __name__ == "__main__":

@@ -11,6 +11,32 @@ exclude_repos:
   - kubeboiii/trainer
   - kubeboiii/pipecd
 
+# Pinned first, in this order (only repos you contributed to appear)
+flagship_repos:
+  - kyverno/kyverno
+  - kubeflow/pipelines
+  - kubeflow/trainer
+  - pipe-cd/pipecd
+  - kserve/kserve
+  - mindersec/minder
+  - kubeflow/spark-operator
+  - kubeflow/katib
+
+# Explicit tags; prefix rules fill in the rest
+ecosystem_tags:
+  kyverno/kyverno: "Policy / Security"
+  pipe-cd/pipecd: "GitOps / CD"
+  kserve/kserve: "ML Serving"
+  mindersec/minder: "Supply Chain"
+
+ecosystem_prefixes:
+  kubeflow/: "ML / Kubeflow"
+  kubernetes/: "Kubernetes"
+  k8s: "Kubernetes"
+  argo: "GitOps"
+  prometheus/: "Observability"
+  grafana/: "Observability"
+
 sort_by: stars
 sort_direction: desc
 
@@ -21,6 +47,9 @@ include_open_prs: true
 include_draft_prs: false
 
 open_pr_prefix: "open:"
+
+active_days: 30
+visible_repo_limit: 15
 
 exclude_title_patterns:
   - "^Merge branch"
