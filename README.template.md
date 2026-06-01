@@ -7,8 +7,6 @@ DevOps / Platform engineer — AWS, Kubernetes, and cloud-native tooling.
 
 <!-- AUTO:STATS -->
 
-<!-- AUTO:ACTIVE -->
-
 #### Contributing to
 
 <!-- AUTO:CONTRIBUTIONS -->

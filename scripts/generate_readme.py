@@ -9,7 +9,7 @@ import re
 import subprocess
 import sys
 from collections import defaultdict
-from datetime import date, datetime, timedelta, timezone
+from datetime import date
 from pathlib import Path
 
 import requests
@@ -164,12 +164,6 @@ def shutil_which(cmd: str) -> bool:
 
 def should_exclude_title(title: str, patterns: list[str]) -> bool:
     return any(re.search(pattern, title) for pattern in patterns)
-
-
-def parse_iso(dt: str | None) -> datetime | None:
-    if not dt:
-        return None
-    return datetime.fromisoformat(dt.replace("Z", "+00:00"))
 
 
 def fetch_pull_requests(token: str, username: str, config: dict) -> dict[str, dict]:
@@ -382,17 +376,6 @@ def render_repo_line(
     )
 
 
-def is_repo_active(repo: str, grouped: dict[str, dict], active_days: int) -> bool:
-    latest = grouped[repo].get("latest")
-    if not latest:
-        return False
-    dt = parse_iso(latest)
-    if not dt:
-        return False
-    cutoff = datetime.now(timezone.utc) - timedelta(days=active_days)
-    return dt >= cutoff
-
-
 def render_stats(grouped: dict[str, dict]) -> str:
     merged_count, open_count = count_prs(grouped)
     repo_count = len(grouped)
@@ -405,32 +388,6 @@ def render_stats(grouped: dict[str, dict]) -> str:
         f"![Updated]({static_badge('Updated', updated, '6e7781')})",
     ]
     return "\n".join(badges)
-
-
-def render_active_strip(
-    grouped: dict[str, dict], stars: dict[str, int], config: dict
-) -> str:
-    active_days = config.get("active_days", 30)
-    active_repos = [
-        repo
-        for repo in grouped
-        if is_repo_active(repo, grouped, active_days)
-    ]
-    if not active_repos:
-        return ""
-
-    active_repos.sort(
-        key=lambda repo: grouped[repo]["latest"] or "",
-        reverse=True,
-    )
-
-    lines = [f"#### Active (last {active_days} days)", ""]
-    for repo in active_repos:
-        line = render_repo_line(repo, grouped, stars, config)
-        if line:
-            lines.append(line)
-
-    return "\n".join(lines) + "\n"
 
 
 def render_contributions(
@@ -473,7 +430,6 @@ def render_footer() -> str:
 
 def build_readme(
     stats: str,
-    active: str,
     contributions: str,
     footer: str,
 ) -> str:
@@ -482,7 +438,6 @@ def build_readme(
 
     replacements = {
         "<!-- AUTO:STATS -->": stats,
-        "<!-- AUTO:ACTIVE -->": active,
         "<!-- AUTO:CONTRIBUTIONS -->": contributions,
         "<!-- AUTO:FOOTER -->": footer,
     }
@@ -508,10 +463,9 @@ def main() -> None:
     stars = fetch_stars(token, list(grouped.keys()), cache)
 
     stats = render_stats(grouped)
-    active = render_active_strip(grouped, stars, config)
     contributions = render_contributions(grouped, stars, config)
     footer = render_footer()
-    readme = build_readme(stats, active, contributions, footer)
+    readme = build_readme(stats, contributions, footer)
 
     OUTPUT_PATH.write_text(readme, encoding="utf-8")
     merged_count, open_count = count_prs(grouped)
