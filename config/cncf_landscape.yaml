@@ -1,0 +1,21 @@
+# Map contributed repos to cloud native landscape-style zones
+zones:
+  Policy & Security:
+    - kyverno/kyverno
+    - mindersec/minder
+  GitOps & CD:
+    - pipe-cd/pipecd
+    - argoproj/argo-cd
+  ML & AI:
+    - kubeflow/pipelines
+    - kubeflow/trainer
+    - kubeflow/spark-operator
+    - kubeflow/katib
+    - kserve/kserve
+  Observability:
+    - prometheus/prometheus
+    - grafana/loki
+    - grafana/grafana
+  Orchestration:
+    - kubernetes/kubernetes
+    - volcano-sh/volcano
