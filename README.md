@@ -34,4 +34,4 @@ Cloud-native open-source engineer working across the CNCF ecosystem, Kubernetes,
 - **[volcano-sh/community](https://github.com/volcano-sh/community)** [![GitHub stars](https://img.shields.io/badge/stars-13-gold?style=flat)](https://github.com/volcano-sh/community/stargazers) - open: [docs: improve CLOMonitor contributing detection and dependency policy](https://github.com/volcano-sh/community/pull/144)
 
 
-*Last updated: 2026-06-03*
+*Last updated: 2026-06-04*
