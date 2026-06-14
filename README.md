@@ -33,4 +33,4 @@ Cloud-native open-source engineer working across the CNCF ecosystem, Kubernetes,
 - **[kagent-dev/website](https://github.com/kagent-dev/website)** [![GitHub stars](https://img.shields.io/badge/stars-17-gold?style=flat)](https://github.com/kagent-dev/website/stargazers) - [fix(footer): update trademark link to LF Projects policies](https://github.com/kagent-dev/website/pull/378), open: [feat(mdx): click-to-expand images in docs and blog](https://github.com/kagent-dev/website/pull/379)
 
 
-*Last updated: 2026-06-12*
+*Last updated: 2026-06-14*
