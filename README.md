@@ -7,8 +7,8 @@
 Cloud-native open-source engineer working across the CNCF ecosystem, Kubernetes, AWS, and distributed systems.
 
 ![Merged PRs](https://img.shields.io/badge/Merged_PRs-8-fb8500?style=flat)
-![Open PRs](https://img.shields.io/badge/Open_PRs-7-fb8500?style=flat)
-![Repos](https://img.shields.io/badge/Repos-8-fb8500?style=flat)
+![Open PRs](https://img.shields.io/badge/Open_PRs-6-fb8500?style=flat)
+![Repos](https://img.shields.io/badge/Repos-7-fb8500?style=flat)
 
 #### Contributor mix
 
@@ -24,14 +24,13 @@ Cloud-native open-source engineer working across the CNCF ecosystem, Kubernetes,
 
 #### Contributing to
 
-- **[kubeflow/trainer](https://github.com/kubeflow/trainer)** · *ML / Kubeflow* [![GitHub stars](https://img.shields.io/badge/stars-2.1k-gold?style=flat)](https://github.com/kubeflow/trainer/stargazers) - open: [feat(cache): support local Iceberg tables for dev and CI](https://github.com/kubeflow/trainer/pull/3564)
 - **[pipe-cd/pipecd](https://github.com/pipe-cd/pipecd)** · *GitOps / CD* [![GitHub stars](https://img.shields.io/badge/stars-1.3k-gold?style=flat)](https://github.com/pipe-cd/pipecd/stargazers) - open: [Prune orphan resources during Kubernetes rollback](https://github.com/pipe-cd/pipecd/pull/6805), open: [Add plugin init scaffold to pipectl](https://github.com/pipe-cd/pipecd/pull/6883), open: [Add devcontainer for contributor environment](https://github.com/pipe-cd/pipecd/pull/6904)
 - **[volcano-sh/volcano](https://github.com/volcano-sh/volcano)** [![GitHub stars](https://img.shields.io/badge/stars-5.7k-gold?style=flat)](https://github.com/volcano-sh/volcano/stargazers) - [ci: set read-only default GitHub Actions permissions](https://github.com/volcano-sh/volcano/pull/5369), open: [metriccollect: use memory working set for agent eviction metrics](https://github.com/volcano-sh/volcano/pull/5337), open: [docs: add Artifact Hub badge for CLOMonitor](https://github.com/volcano-sh/volcano/pull/5371)
 - **[pulumi/pulumi-aws](https://github.com/pulumi/pulumi-aws)** [![GitHub stars](https://img.shields.io/badge/stars-577-gold?style=flat)](https://github.com/pulumi/pulumi-aws/stargazers) - [docs: replace Terraform lifecycle block with Pulumi ignoreChanges in …](https://github.com/pulumi/pulumi-aws/pull/6277)
-- **[volcano-sh/agentcube](https://github.com/volcano-sh/agentcube)** [![GitHub stars](https://img.shields.io/badge/stars-149-gold?style=flat)](https://github.com/volcano-sh/agentcube/stargazers) - [manifests: load REDIS_PASSWORD from Secret via secretKeyRef](https://github.com/volcano-sh/agentcube/pull/372)
-- **[kubernetes/contributor-site](https://github.com/kubernetes/contributor-site)** · *Kubernetes* [![GitHub stars](https://img.shields.io/badge/stars-86-gold?style=flat)](https://github.com/kubernetes/contributor-site/stargazers) - [fix: prevent horizontal overflow on KEP detail pages](https://github.com/kubernetes/contributor-site/pull/793)
+- **[volcano-sh/agentcube](https://github.com/volcano-sh/agentcube)** [![GitHub stars](https://img.shields.io/badge/stars-150-gold?style=flat)](https://github.com/volcano-sh/agentcube/stargazers) - [manifests: load REDIS_PASSWORD from Secret via secretKeyRef](https://github.com/volcano-sh/agentcube/pull/372)
+- **[kubernetes/contributor-site](https://github.com/kubernetes/contributor-site)** · *Kubernetes* [![GitHub stars](https://img.shields.io/badge/stars-88-gold?style=flat)](https://github.com/kubernetes/contributor-site/stargazers) - [fix: prevent horizontal overflow on KEP detail pages](https://github.com/kubernetes/contributor-site/pull/793)
 - **[volcano-sh/website](https://github.com/volcano-sh/website)** [![GitHub stars](https://img.shields.io/badge/stars-31-gold?style=flat)](https://github.com/volcano-sh/website/stargazers) - [website: fix broken OG image and supporter links](https://github.com/volcano-sh/website/pull/510), [Add favicon to Volcano website](https://github.com/volcano-sh/website/pull/508), [website: restore Google Analytics 4 for volcano.sh](https://github.com/volcano-sh/website/pull/517)
 - **[kagent-dev/website](https://github.com/kagent-dev/website)** [![GitHub stars](https://img.shields.io/badge/stars-17-gold?style=flat)](https://github.com/kagent-dev/website/stargazers) - [fix(footer): update trademark link to LF Projects policies](https://github.com/kagent-dev/website/pull/378), open: [feat(mdx): click-to-expand images in docs and blog](https://github.com/kagent-dev/website/pull/379)
 
 
-*Last updated: 2026-06-24*
+*Last updated: 2026-06-26*
