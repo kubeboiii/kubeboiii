@@ -7,7 +7,7 @@
 Cloud-native open-source engineer working across the CNCF ecosystem, Kubernetes, AWS, and distributed systems.
 
 ![Merged PRs](https://img.shields.io/badge/Merged_PRs-8-fb8500?style=flat)
-![Open PRs](https://img.shields.io/badge/Open_PRs-4-fb8500?style=flat)
+![Open PRs](https://img.shields.io/badge/Open_PRs-3-fb8500?style=flat)
 ![Repos](https://img.shields.io/badge/Repos-7-fb8500?style=flat)
 
 #### Contributor mix
@@ -25,7 +25,7 @@ Cloud-native open-source engineer working across the CNCF ecosystem, Kubernetes,
 #### Contributing to
 
 - **[pipe-cd/pipecd](https://github.com/pipe-cd/pipecd)** · *GitOps / CD* [![GitHub stars](https://img.shields.io/badge/stars-1.3k-gold?style=flat)](https://github.com/pipe-cd/pipecd/stargazers) - open: [Add devcontainer for contributor environment](https://github.com/pipe-cd/pipecd/pull/6904)
-- **[volcano-sh/volcano](https://github.com/volcano-sh/volcano)** [![GitHub stars](https://img.shields.io/badge/stars-5.7k-gold?style=flat)](https://github.com/volcano-sh/volcano/stargazers) - [ci: set read-only default GitHub Actions permissions](https://github.com/volcano-sh/volcano/pull/5369), open: [metriccollect: use memory working set for agent eviction metrics](https://github.com/volcano-sh/volcano/pull/5337), open: [docs: add Artifact Hub badge for CLOMonitor](https://github.com/volcano-sh/volcano/pull/5371)
+- **[volcano-sh/volcano](https://github.com/volcano-sh/volcano)** [![GitHub stars](https://img.shields.io/badge/stars-5.7k-gold?style=flat)](https://github.com/volcano-sh/volcano/stargazers) - [ci: set read-only default GitHub Actions permissions](https://github.com/volcano-sh/volcano/pull/5369), open: [metriccollect: use memory working set for agent eviction metrics](https://github.com/volcano-sh/volcano/pull/5337)
 - **[pulumi/pulumi-aws](https://github.com/pulumi/pulumi-aws)** [![GitHub stars](https://img.shields.io/badge/stars-577-gold?style=flat)](https://github.com/pulumi/pulumi-aws/stargazers) - [docs: replace Terraform lifecycle block with Pulumi ignoreChanges in …](https://github.com/pulumi/pulumi-aws/pull/6277)
 - **[volcano-sh/agentcube](https://github.com/volcano-sh/agentcube)** [![GitHub stars](https://img.shields.io/badge/stars-150-gold?style=flat)](https://github.com/volcano-sh/agentcube/stargazers) - [manifests: load REDIS_PASSWORD from Secret via secretKeyRef](https://github.com/volcano-sh/agentcube/pull/372)
 - **[kubernetes/contributor-site](https://github.com/kubernetes/contributor-site)** · *Kubernetes* [![GitHub stars](https://img.shields.io/badge/stars-88-gold?style=flat)](https://github.com/kubernetes/contributor-site/stargazers) - [fix: prevent horizontal overflow on KEP detail pages](https://github.com/kubernetes/contributor-site/pull/793)
